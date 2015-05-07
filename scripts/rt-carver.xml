@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="RT Carver" default="full">
+    <description>
+        Dis-assemble and repackage rt.jar for embedded stub application
+    </description>
+
+    <property name="temp-dir"        value="temp"/>
+    <property name="rt-original-jar" value="rt-original.jar"/>
+    <!--
+    java.home not pointing to release 10 right now use above
+    <property name="rt-original-jar" value="${java.home}/lib/rt.jar"/>
+    -->
+    <!-- ======================= Un-Jar Section =========================== -->
+    <target name="un-jar">
+        <delete dir="${temp-dir}" quiet="true"/>
+        <mkdir  dir="${temp-dir}"/>
+        <unjar src="${rt-original-jar}" dest="${temp-dir}" />
+    </target>
+    <!-- ======================= Carving Section ========================== -->
+    <target name="carve" depends="un-jar">
+<!-- 2840.0  KB --> <delete dir="${temp-dir}/com/sun/corba"/>
+<!--  960.0  KB --> <delete dir="${temp-dir}/com/sun/jmx"/>
+<!--  596.0  KB --> <delete dir="${temp-dir}/com/sun/jndi"/>  
+<!--  861.0  KB --> <delete dir="${temp-dir}/com/sun/org/apache/bcel"/>
+<!-- 1200.0  KB --> <delete dir="${temp-dir}/com/sun/java/swing"/>
+
+<!-- 6000.0  KB --> <delete dir="${temp-dir}/javax/swing"/>
+
+<!--  755.0  KB --> <delete dir="${temp-dir}/org/omg"/>  
+
+<!--  306.0  KB --> <delete dir="${temp-dir}/sun/applet"/>  
+<!--  415.0  KB --> <delete dir="${temp-dir}/sun/rmi"/>
+<!--  375.0  KB --> <delete dir="${temp-dir}/sun/swing"/>
+
+    </target>
+    <!-- ======================= Re-Jar Section =========================== -->
+    <target name="re-jar" depends="carve">
+        <jar destfile="rt.jar" basedir="${temp-dir}" level="0"/>
+    </target>
+    <!-- ================================================================== -->
+   <target name="full" depends="re-jar">
+     <!--   <delete dir="${temp-dir}" quiet="true"/> -->
+   </target>
+</project>

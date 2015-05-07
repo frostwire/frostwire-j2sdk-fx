@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Resources Carver" default="full">
+    <description>
+        Dis-assemble and repackage resources.jar for embedded stub application
+    </description>
+
+    <property name="temp-dir"        value="temp"/>
+    <property name="resources-original-jar" value="resources-original.jar"/>
+    <!-- ======================= Un-Jar Section =========================== -->
+    <target name="un-jar">
+        <delete dir="${temp-dir}" quiet="true"/>
+        <mkdir  dir="${temp-dir}"/>
+        <unjar src="${resources-original-jar}" dest="${temp-dir}" />
+    </target>
+    <!-- ======================= Carving Section ========================== -->
+    <target name="carve" depends="un-jar">
+<!--  142.0  KB --> <delete dir="${temp-dir}/com/sun/corba"/>
+<!--  338.0  KB --> <delete dir="${temp-dir}/com/sun/jndi"/>
+<!--   50.0  KB --> <delete dir="${temp-dir}/com/sun/java/swing"/>
+
+<!--  187.0  KB --> <delete dir="${temp-dir}/javax/swing"/>
+
+    </target>
+    <!-- ======================= Re-Jar Section =========================== -->
+    <target name="re-jar" depends="carve">
+        <jar destfile="resources.jar" basedir="${temp-dir}" level="0"/>
+    </target>
+    <!-- ================================================================== -->
+   <target name="full" depends="re-jar">
+     <!--   <delete dir="${temp-dir}" quiet="true"/> -->
+   </target>
+</project>
