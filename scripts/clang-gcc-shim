@@ -1,0 +1,16 @@
+#!/bin/bash
+
+binaryname=`basename $0`
+if [ $# -ge 1 ]; then
+    if [ $1 = "--version" ]; then
+        echo "$binaryname (GCC) 4.8.2"
+        echo "Copyright (C) 2013 Free Software Foundation, Inc."
+        echo "This is free software; see the source for copying conditions.  There is NO"
+        echo "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+        echo ""
+
+        exit 0
+    fi
+fi
+
+/usr/bin/clang "$@"
